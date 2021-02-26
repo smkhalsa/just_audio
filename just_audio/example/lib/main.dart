@@ -74,6 +74,23 @@ class _MyAppState extends State<MyApp> {
     final session = await AudioSession.instance;
     await session.configure(AudioSessionConfiguration.speech());
     try {
+      final d1 = await _player.setAudioSource(
+        AudioSource.uri(
+          Uri.parse(
+              "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3"),
+        ),
+      );
+
+      /// this is null
+      final d2 = await _player.setAudioSource(
+        ClippingAudioSource(
+          start: Duration(seconds: 60),
+          end: Duration(seconds: 90),
+          child: AudioSource.uri(Uri.parse(
+              "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3")),
+        ),
+      );
+
       await _player.setAudioSource(_playlist);
     } catch (e) {
       // catch load errors: 404, invalid url ...
